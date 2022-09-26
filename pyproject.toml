@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "lnmarketcapbot"
+version = "0.1.0"
+description = ""
+authors = ["Crawford <crawford@crawfordleeds.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+APScheduler = "^3.9.1"
+python-graphql-client = "^0.4.3"
+
+[tool.poetry.dev-dependencies]
+black = "^22.6.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
