@@ -1,4 +1,3 @@
-from distutils.util import byte_compile
 import os
 from apscheduler.schedulers.blocking import BlockingScheduler
 from python_graphql_client import GraphqlClient

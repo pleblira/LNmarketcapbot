@@ -15,12 +15,12 @@ BASE_CMC_URL = "https://pro-api.coinmarketcap.com"
 COINMARKETCAP_API_KEY = os.environ.get("COINMARKETCAP_API_KEY")
 
 global shitcoin
-shitcoin = "shitcoin"
+global shitcoin_mcap
+# shitcoin = "123"
+
 shitcoin = input("What shitcoin would you like to compare LN to? ").upper()
 
 def coinmarketcap_get_shitcoin_mcap(shitcoin):
-    if shitcoin == "123":
-        return
     if not COINMARKETCAP_API_KEY:
         print("MISSING COINMARKETCAP API KEY. SET COINMARKETCAP_API_KEY in .env")
         exit()
@@ -40,8 +40,7 @@ def coinmarketcap_get_shitcoin_mcap(shitcoin):
     global shitcoin_mcap
     response = session.get(url, params=parameters)
     shitcoin_mcap = json.loads(response.text)['data'][shitcoin]['quote']['USD']['market_cap']
-    # print(shitcoin_mcap)
-    # shitcoin = shitcoin
+    shitcoin = shitcoin
     return shitcoin
     return shitcoin_mcap
 

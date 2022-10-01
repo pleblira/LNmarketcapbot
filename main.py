@@ -3,14 +3,16 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from python_graphql_client import GraphqlClient
 import requests
 from dotenv import load_dotenv, find_dotenv
-from amboss_get_LN_capacity import *
+# from amboss_get_LN_capacity import *
+import amboss_get_LN_capacity
 from coinmarketcap_get_btc_usd import *
 from coinmarketcap_get_shitcoin_mcap import *
 # import coinmarketcap_get_btc_usd
 from tweepy_send_tweet import *
 import random
 import urllib.request
-
+import text_on_images
+import subprocess
 
 ENV_FILE = find_dotenv()
 if ENV_FILE:
@@ -42,14 +44,15 @@ def LN_flippening_tracker():
 
     # fetching BTC price in USD
     coinmarketcap_get_btc_usd()
-    btc_usd_text ="BTC price: ${:,.2f}".format(btc_usd)
+    btc_usd_text ="BTC price: ${:,.0f}".format(btc_usd)
 
     # Calculating current amount allocated in the LN
-    LN_mcap_text = "$ allocated in the LN: ${:,.2f}".format(LN_capacity_in_BTC*btc_usd)
+    LN_mcap_text = "$ allocated in the LN: ${:,.0f}".format(LN_capacity_in_BTC*btc_usd)
 
     # fetching shitcoin mcap
+    shitcoin = input("What shitcoin would you like to compare LN to? ").upper()
     coinmarketcap_get_shitcoin_mcap(shitcoin=shitcoin)
-    shitcoin_mcap_text = shitcoin.upper() + " market cap: ${:,.2f}".format(shitcoin_mcap)
+    shitcoin_mcap_text = shitcoin.upper() + " market cap: ${:,.0f}".format(shitcoin_mcap)
     
     # Comparing LN network with shitcoin
     percentage_bar = int(LN_capacity_in_BTC*btc_usd/shitcoin_mcap*100/5)
@@ -66,19 +69,22 @@ def LN_flippening_tracker():
     )
 
     # asking if would like to choose image or pick a random one
-    random_image_or_choose = input("Pick and image or choose at random? (pick/random)")
+    random_image_or_choose = input("Pick and image or choose at random (pick/random)? ")
     if random_image_or_choose == "pick":
-        image_url = input("insert image full URL or path here: ")
-        urllib.request.urlretrieve(image_url, "00000001.jpg")
-        tweet_image = "00000001.jpg"
+        image_url_or_path = input("insert image full URL or path here: ")
+        if image_url_or_path.find("http")>-1 and image_url_or_path.find("//")>0:
+            urllib.request.urlretrieve(image_url_or_path, "00000001.jpg")
+            tweet_image = "00000001.jpg"
+        else:
+            tweet_image = image_url_or_path
     if random_image_or_choose == "random":
         random_image_picker = random.randint(1,5)
-        tweet_image = str(random_image_picker) + ".png"
-        
+        tweet_image = str(random_image_picker) + ".png"     
+    subprocess.call(('open', tweet_image))
 
     # LIGHTNING NETWORK FLIPPENING TRACKER TWEET
     tweet_message = (
-    "LIGHTNING NETWORK FLIPPENING TRACKER - LN vs " + shitcoin + "\n\n" + 
+    "LIGHTNING NETWORK FLIPPENING TRACKER - LN vs $" + shitcoin + "\n\n" + 
     LN_capacity_text + "\n" + 
     btc_usd_text + "\n" + 
     LN_mcap_text + "\n\n" + 
@@ -86,8 +92,14 @@ def LN_flippening_tracker():
     flippening_progress_text
     )
     print(tweet_message)
-    tweepy_send_tweet(tweet_message,tweet_image)
-    print("Tweet sent")
+    confirm_send_tweet = input("Send tweet (y/n)? ")
+    if confirm_send_tweet == "y":
+        tweepy_send_tweet(tweet_message,tweet_image)
+        print("Tweet sent")
+        quit()
+    else:
+        return
+    # tweepy_send_tweet has been disabled for testing
 
 
 def LN_cap():
@@ -96,8 +108,12 @@ def LN_cap():
     LN_capacity_text = "Current LN channel capacity: " + str(LN_capacity_in_BTC) + "BTC"
 
     # picking random image
-    random_image_picker = random.randint(1,5)
-    tweet_image = str(random_image_picker) + ".png"
+    # random_image_picker = random.randint(1,5)
+    # tweet_image = str(random_image_picker) + ".png"
+
+    # typing LN capacity on mascot
+    text_on_images.image_draw(LN_capacity_in_BTC)
+    quit()
 
     # LIGHTNING NETWORK CAPACITY TWEET
     tweet_message = (
@@ -107,8 +123,6 @@ def LN_cap():
     tweepy_send_tweet(tweet_message,tweet_image)
     print("Tweet sent")
 
-
-# just a comment
 
 if __name__ == "__main__":
     main()

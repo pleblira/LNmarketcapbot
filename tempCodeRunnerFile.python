@@ -1,0 +1,5 @@
+path = input("type url or path: ")
+if path.find("http")>-1 and path.find("//")>-1:
+    print("url")
+else:
+    print("not url")
