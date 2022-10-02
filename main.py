@@ -98,8 +98,8 @@ def LN_flippening_tracker():
 def LN_cap():
     # fetching LN capacity in BTC
     LN_capacity_in_BTC = amboss_get_LN_capacity()
-    # LN_capacity_text = "Current LN channel capacity: " + str(LN_capacity_in_BTC) + "BTC"
-    LN_capacity_text = "Current LN channel capacity: " + str(5000) + "BTC"
+    # LN_capacity_text = "Current LN channel capacity: " + str(LN_capacity_in_BTC) + " BTC"
+    LN_capacity_text = "Current LN channel capacity: " + str(5000) + " BTC"
 
     # picking random image
     # random_image_picker = random.randint(1,5)
