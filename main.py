@@ -1,4 +1,4 @@
-from apscheduler.schedulers.blocking import BlockingScheduler
+# from apscheduler.schedulers.blocking import BlockingScheduler
 from amboss_get_LN_capacity import *
 from coinmarketcap_get_btc_usd import *
 from coinmarketcap_get_shitcoin_mcap import *
@@ -9,7 +9,7 @@ import text_on_images
 import subprocess
 import os
 
-sched = BlockingScheduler()
+# sched = BlockingScheduler()
 
 def main():
     while True:
@@ -73,6 +73,10 @@ def LN_flippening_tracker():
         quit()
     subprocess.call(('open', tweet_image))
 
+    custom_text_yes_or_no = input("Would you like to add custom text to the tweet (y/n)? ")
+    if custom_text_yes_or_no == "y":
+        custom_text = input("Type text (single line): ")
+
     # LIGHTNING NETWORK FLIPPENING TRACKER TWEET
     tweet_message = (
     "LIGHTNING NETWORK FLIPPENING TRACKER - LN vs $" + shitcoin + "\n\n" + 
@@ -82,6 +86,8 @@ def LN_flippening_tracker():
     shitcoin_mcap_text + "\n\n" + 
     flippening_progress_text
     )
+    if custom_text_yes_or_no == "y":
+        tweet_message = tweet_message + "\n\n" + custom_text
     print(tweet_message)
     confirm_send_tweet = input("Send tweet (y/n)? ")
     if confirm_send_tweet == "y":
@@ -111,11 +117,17 @@ def LN_cap():
     tweet_image = text_on_images.image_draw_angled(5000, tweet_image)
     subprocess.call(('open', "assets/tweet_image.jpg"))
 
+    custom_text_yes_or_no = input("Would you like to add custom text to the tweet (y/n)? ")
+    if custom_text_yes_or_no == "y":
+        custom_text = input("Type text (single line): ")
+
     # LIGHTNING NETWORK CAPACITY TWEET
     tweet_message = (
     "LIGHTNING NETWORK CAPACITY UPDATE" + "\n\n" + 
-    LN_capacity_text + "\n"
+    LN_capacity_text
         )
+    if custom_text_yes_or_no == "y":
+        tweet_message = tweet_message + "\n\n" + custom_text
     print(tweet_message)
     confirm_send_tweet = input("Send tweet (y/n)? ")
     if confirm_send_tweet == "y":
