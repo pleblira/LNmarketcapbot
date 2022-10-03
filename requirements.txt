@@ -3,4 +3,4 @@ python-dotenv==0.21.0
 apscheduler==3.9.1
 tweepy==4.10.1
 python_graphql_client==0.4.3
-PIL==9.2.0
+Pillow==9.2.0
