@@ -147,7 +147,7 @@ def tick():
 
 if __name__ == '__main__':
     scheduler = BlockingScheduler()
-    scheduler.add_job(tick, 'cron', hour=11, minute=10, timezone="America/New_York")
+    scheduler.add_job(tick, 'cron', hour=11, minute=20, timezone="America/New_York")
     print('Press Ctrl+{0} to stop scheduler and switch to manual tweet.'.format('Break' if os.name == 'nt' else 'C'))
 
     try:
