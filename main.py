@@ -1,4 +1,3 @@
-# from apscheduler.schedulers.blocking import BlockingScheduler
 from amboss_get_LN_capacity import *
 from coinmarketcap_get_btc_usd import *
 from coinmarketcap_get_shitcoin_mcap import *
@@ -8,17 +7,17 @@ import urllib.request
 import text_on_images
 import subprocess
 import os
+from datetime import datetime
+from apscheduler.schedulers.blocking import BlockingScheduler
 
-# sched = BlockingScheduler()
-
-def main():
+def manual_tweet():
     while True:
-        option = input("What kind of tweet would you like to send (flippening/LNcap/quit)? ")
+        option = input("What kind of tweet would you like to send (flippening/LN_cap/quit)? ")
         if option.lower() == "quit":
             quit()
         if option.lower() == "flippening":
             LN_flippening_tracker()
-        if option.lower() == "lncap":
+        if option.lower() == "ln_cap":
             LN_cap()
         else:
             continue
@@ -138,5 +137,23 @@ def LN_cap():
     else:
         return
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
+
+# script initialization: It auto-starts the daily LN_cap tweet at 12 pm ET. User can press Ctrl+C or Ctrl+Break to start manual tweeting functionality
+
+def tick():
+    print('Tick! The time is: %s' % datetime.now())
+
+if __name__ == '__main__':
+    scheduler = BlockingScheduler()
+    scheduler.add_job(tick, 'cron', hour=11, minute=0, timezone="America/New_York")
+    print('Press Ctrl+{0} to stop scheduler and switch to manual tweet.'.format('Break' if os.name == 'nt' else 'C'))
+
+    try:
+        scheduler.start()
+    except (KeyboardInterrupt, SystemExit):
+        print("\nScheduler stopped. Starting manual tweet functionality.\n\n")
+        manual_tweet()
+
+
