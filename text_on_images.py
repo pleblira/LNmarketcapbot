@@ -6,7 +6,7 @@ def image_draw_angled(LN_capacity_in_BTC, tweet_image):
         if tweet_image == "assets/blank_belly_dark_mode/1.jpg":
                 tweet_image = Image.open(tweet_image)
                 # font = ImageFont.truetype("SourceCodePro-Bold.ttf",100)
-                font = ImageFont.truetype("Silom_new_location.ttf",85)
+                font = ImageFont.truetype("assets/Silom_new_location.ttf",85)
                 
                 # Creating a temporary canvas, drawing the text on it, and rotating
                 temporary_canvas = Image.new(mode='L', size=(500,500))
@@ -26,7 +26,7 @@ def image_draw_angled(LN_capacity_in_BTC, tweet_image):
         if tweet_image == "assets/blank_belly_dark_mode/2.jpg":
                 tweet_image = Image.open(tweet_image)
                 # font = ImageFont.truetype("SourceCodePro-Bold.ttf",100)
-                font = ImageFont.truetype("Silom_new_location.ttf",95)
+                font = ImageFont.truetype("assets/Silom_new_location.ttf",95)
                 
                 # Creating a temporary canvas, drawing the text on it, and rotating
                 temporary_canvas = Image.new(mode='L', size=(500,500))
@@ -46,7 +46,7 @@ def image_draw_angled(LN_capacity_in_BTC, tweet_image):
         if tweet_image == "assets/blank_belly_dark_mode/3.jpg":
                 tweet_image = Image.open(tweet_image)
                 # font = ImageFont.truetype("SourceCodePro-Bold.ttf",100)
-                font = ImageFont.truetype("Silom_new_location.ttf",88)
+                font = ImageFont.truetype("assets/Silom_new_location.ttf",88)
                 
                 # Creating a temporary canvas, drawing the text on it, and rotating
                 temporary_canvas = Image.new(mode='L', size=(500,500))
@@ -66,7 +66,7 @@ def image_draw_angled(LN_capacity_in_BTC, tweet_image):
         if tweet_image == "assets/blank_belly_dark_mode/4.jpg":
                 tweet_image = Image.open(tweet_image)
                 # font = ImageFont.truetype("SourceCodePro-Bold.ttf",100)
-                font = ImageFont.truetype("Silom_new_location.ttf",86)
+                font = ImageFont.truetype("assets/Silom_new_location.ttf",86)
                 
                 # Creating a temporary canvas, drawing the text on it, and rotating
                 temporary_canvas = Image.new(mode='L', size=(500,500))
@@ -86,7 +86,7 @@ def image_draw_angled(LN_capacity_in_BTC, tweet_image):
         if tweet_image == "assets/blank_belly_dark_mode/5.jpg":
                 tweet_image = Image.open(tweet_image)
                 # font = ImageFont.truetype("SourceCodePro-Bold.ttf",100)
-                font = ImageFont.truetype("Silom_new_location.ttf",86)
+                font = ImageFont.truetype("assets/Silom_new_location.ttf",86)
                 
                 # Creating a temporary canvas, drawing the text on it, and rotating
                 temporary_canvas = Image.new(mode='L', size=(500,500))
