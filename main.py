@@ -12,10 +12,10 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 def manual_tweet():
     while True:
-        option = input("What kind of tweet would you like to send (flippening/LN_cap/quit)? ")
+        option = input("What kind of tweet would you like to send (LN_flippening/LN_cap/quit)? ")
         if option.lower() == "quit":
             quit()
-        if option.lower() == "flippening":
+        if option.lower() == "ln_flippening":
             LN_flippening_tracker()
         if option.lower() == "ln_cap":
             LN_cap()
@@ -103,17 +103,15 @@ def LN_flippening_tracker():
 def LN_cap():
     # fetching LN capacity in BTC
     LN_capacity_in_BTC = amboss_get_LN_capacity()
-    # LN_capacity_text = "Current LN channel capacity: " + str(LN_capacity_in_BTC) + " BTC"
-    LN_capacity_text = "Current LN channel capacity: " + str(5000) + " BTC"
+    LN_capacity_text = "Current LN channel capacity: " + str(LN_capacity_in_BTC) + " BTC"
 
     # picking random image
-    # random_image_picker = random.randint(1,5)
-    # tweet_image = "assets/blank_belly_dark_mode/" + str(random_image_picker) + ".jpg"
-    tweet_image = "assets/blank_belly_dark_mode/2.jpg"
+    random_image_picker = random.randint(1,6)
+    tweet_image = "assets/blank_belly_dark_mode/" + str(random_image_picker) + ".jpg"
 
     # typing LN capacity on mascot
     # tweet_image = text_on_images.image_draw_angled(LN_capacity_in_BTC, tweet_image)
-    tweet_image = text_on_images.image_draw_angled(5000, tweet_image)
+    tweet_image = text_on_images.image_draw_angled(LN_capacity_in_BTC, tweet_image)
     subprocess.call(('open', "assets/tweet_image.jpg"))
 
     custom_text_yes_or_no = input("Would you like to add custom text to the tweet (y/n)? ")
@@ -142,12 +140,31 @@ def LN_cap():
 
 # script initialization: It auto-starts the daily LN_cap tweet at 12 pm ET. User can press Ctrl+C or Ctrl+Break to start manual tweeting functionality
 
-def tick():
-    print('Tick! The time is: %s' % datetime.now())
+def LN_cap_automated():
+    # fetching LN capacity in BTC
+    LN_capacity_in_BTC = amboss_get_LN_capacity()
+    LN_capacity_text = "Current LN channel capacity: " + str(LN_capacity_in_BTC) + " BTC"
+
+    # picking random image
+    random_image_picker = random.randint(1,6)
+    tweet_image = "assets/blank_belly_dark_mode/" + str(random_image_picker) + ".jpg"
+
+    # typing LN capacity on mascot
+    tweet_image = text_on_images.image_draw_angled(LN_capacity_in_BTC, tweet_image)
+
+    # LIGHTNING NETWORK CAPACITY TWEET
+    tweet_message = (
+    "LIGHTNING NETWORK CAPACITY UPDATE" + "\n\n" + 
+    LN_capacity_text
+        )
+    print(tweet_message)
+    tweepy_send_tweet(tweet_message,"assets/tweet_image.jpg")
+    print("Tweet sent")
+    os.remove("assets/tweet_image.jpg")
 
 if __name__ == '__main__':
     scheduler = BlockingScheduler()
-    scheduler.add_job(tick, 'cron', hour=11, minute=50, timezone="America/New_York")
+    scheduler.add_job(LN_cap_automated, 'cron', hour=12, minute=00, timezone="America/New_York")
     print('Press Ctrl+{0} to stop scheduler and switch to manual tweet.'.format('Break' if os.name == 'nt' else 'C'))
 
     try:
