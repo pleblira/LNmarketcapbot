@@ -27,33 +27,33 @@ def manual_tweet():
 def LN_flippening_tracker():
     # fetching LN capacity in BTC
     LN_capacity_in_BTC = amboss_get_LN_capacity()
-    LN_capacity_text = "LN channel capacity: " + str(LN_capacity_in_BTC) + "BTC"
+    LN_capacity_text = f"LN channel capacity: {str(LN_capacity_in_BTC)} BTC"
 
     # fetching BTC price in USD
     btc_usd = coinmarketcap_get_btc_usd()
-    btc_usd_text ="BTC price: ${:,.0f}".format(btc_usd)
+    btc_usd_text =f"BTC price: ${btc_usd:,.0f}"
 
     # Calculating current amount allocated in the LN
-    LN_mcap_text = "$ allocated in the LN: ${:,.0f}".format(LN_capacity_in_BTC*btc_usd)
+    LN_mcap_text = f"$ allocated in the LN: ${LN_capacity_in_BTC*btc_usd:,.0f}"
 
     # fetching shitcoin mcap
     shitcoin = input("What shitcoin would you like to compare LN to? ").upper()
     coinmarketcap_get_shitcoin_mcap(shitcoin)
     shitcoin_mcap = coinmarketcap_get_shitcoin_mcap(shitcoin=shitcoin)[1]
-    shitcoin_mcap_text = shitcoin.upper() + " market cap: ${:,.0f}".format(shitcoin_mcap)
+    shitcoin_mcap_text = f"{shitcoin.upper()} market cap: ${shitcoin_mcap:,.0f}"
     
     # Comparing LN network with shitcoin
     percentage_bar = int(LN_capacity_in_BTC*btc_usd/shitcoin_mcap*100/5)
     if percentage_bar > 20:
         percentage_bar = 20
-    percentage_calculation = LN_capacity_in_BTC*btc_usd/shitcoin_mcap*100
-    if percentage_calculation > 100:
-        percentage_calculation = "FLIPPED (LN = %{:,.2f}".format(percentage_calculation) + " " + shitcoin + ")"
+    percentage_calculation = str(f"{LN_capacity_in_BTC*btc_usd/shitcoin_mcap*100:.2f}")
+    if float(percentage_calculation) > 100:
+        percentage_calculation = f"FLIPPED (LN market cap = {float(percentage_calculation)/100:.2f}X {shitcoin.upper()}'s market cap)"
 
     flippening_progress_text = (
         "Progress (LN flippening " + shitcoin + ")\n" + 
         "▓" * percentage_bar + "░" * (20 - percentage_bar) + " " +
-        str("{:,.2f}".format(percentage_calculation)) + "%"
+        percentage_calculation + "%"
     )
 
     # asking if would like to choose image or pick a random one
@@ -104,14 +104,20 @@ def LN_flippening_tracker():
 def LN_cap():
     # fetching LN capacity in BTC
     LN_capacity_in_BTC = amboss_get_LN_capacity()
-    LN_capacity_text = "Current LN channel capacity: " + str(LN_capacity_in_BTC) + " BTC"
+    LN_capacity_text = f"Current LN channel capacity: {LN_capacity_in_BTC:.0f} BTC"
+
+    # fetching BTC price in USD
+    btc_usd = coinmarketcap_get_btc_usd()
+    btc_usd_text =f"BTC price: ${btc_usd:,.0f}"
+
+    # Calculating current amount allocated in the LN
+    LN_mcap_text = f"$ allocated in the LN: ${LN_capacity_in_BTC*btc_usd:,.0f}"
 
     # picking random image
     random_image_picker = random.randint(1,6)
-    tweet_image = "assets/blank_belly_dark_mode/" + str(random_image_picker) + ".jpg"
+    tweet_image = f"assets/blank_belly_dark_mode/{str(random_image_picker)}.jpg"
 
     # typing LN capacity on mascot
-    # tweet_image = text_on_images.image_draw_angled(LN_capacity_in_BTC, tweet_image)
     tweet_image = text_on_images.image_draw_angled(LN_capacity_in_BTC, tweet_image)
     subprocess.call(('open', "assets/tweet_image.jpg"))
 
@@ -122,7 +128,9 @@ def LN_cap():
     # LIGHTNING NETWORK CAPACITY TWEET
     tweet_message = (
     "LIGHTNING NETWORK CAPACITY UPDATE" + "\n\n" + 
-    LN_capacity_text
+    LN_capacity_text + "\n" + 
+    btc_usd_text + "\n" +
+    LN_mcap_text
         )
     if custom_text_yes_or_no == "y":
         tweet_message = tweet_message + "\n\n" + custom_text
@@ -144,7 +152,15 @@ def LN_cap():
 def LN_cap_automated():
     # fetching LN capacity in BTC
     LN_capacity_in_BTC = amboss_get_LN_capacity()
-    LN_capacity_text = "Current LN channel capacity: " + str(LN_capacity_in_BTC) + " BTC"
+    LN_capacity_text = f"Current LN channel capacity: {LN_capacity_in_BTC} BTC"
+
+    # fetching BTC price in USD
+    btc_usd = coinmarketcap_get_btc_usd()
+    btc_usd_text =f"BTC price: ${btc_usd:,.0f}"
+
+    # Calculating current amount allocated in the LN
+    LN_mcap_text = f"$ allocated in the LN: ${LN_capacity_in_BTC*btc_usd:,.0f}"
+
 
     # picking random image
     random_image_picker = random.randint(1,6)
@@ -169,7 +185,9 @@ def LN_cap_automated():
     # LIGHTNING NETWORK CAPACITY TWEET
     tweet_message = (
     "LIGHTNING NETWORK CAPACITY UPDATE" + "\n\n" + 
-    LN_capacity_text
+    LN_capacity_text + "\n" + 
+    btc_usd_text + "\n" +
+    LN_mcap_text
         )
     print(tweet_message)
     tweepy_send_tweet(tweet_message,"assets/tweet_image.jpg")
