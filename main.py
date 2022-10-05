@@ -12,17 +12,18 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 def manual_tweet():
     while True:
-        option = input("What kind of tweet would you like to send (LN_flippening/LN_cap/quit)? ")
+        option = input("What kind of tweet would you like to send (LN_flippening/LN_cap/quit/autotest)? ")
         if option.lower() == "quit":
             quit()
         if option.lower() == "ln_flippening":
             LN_flippening_tracker()
         if option.lower() == "ln_cap":
             LN_cap()
+        if option.lower() == "autotest":
+            LN_cap_automated()
         else:
             continue
 
-# @sched.scheduled_job("cron", hour=15, minute=0, timezone="America/Denver")
 def LN_flippening_tracker():
     # fetching LN capacity in BTC
     LN_capacity_in_BTC = amboss_get_LN_capacity()
@@ -147,6 +148,19 @@ def LN_cap_automated():
 
     # picking random image
     random_image_picker = random.randint(1,6)
+    with open("previously_selected_images.txt","r") as file:
+        lines = file.readlines()
+        if len(lines) == 0:
+            last_two_random_picks = "-1"
+            last_random_pick = "-1"
+        else:
+            last_random_pick = lines[len(lines)-1].strip()
+            last_two_random_picks = lines[len(lines)-1].strip() + lines[len(lines)-2].strip()
+    while str(last_two_random_picks).find(str(random_image_picker)) > -1:
+        random_image_picker = random.randint(1,6)
+    with open("previously_selected_images.txt","a") as file:
+        file.write(str(random_image_picker) + "\n")
+
     tweet_image = "assets/blank_belly_dark_mode/" + str(random_image_picker) + ".jpg"
 
     # typing LN capacity on mascot
