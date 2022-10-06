@@ -196,7 +196,7 @@ def LN_cap_automated():
 
 if __name__ == '__main__':
     scheduler = BlockingScheduler()
-    scheduler.add_job(LN_cap_automated, 'cron', hour=12, minute=5, timezone="America/New_York")
+    scheduler.add_job(LN_cap_automated, 'cron', hour=12, minute=00, timezone="America/New_York")
     print('Press Ctrl+{0} to stop scheduler and switch to manual tweet.'.format('Break' if os.name == 'nt' else 'C'))
 
     try:
@@ -204,5 +204,3 @@ if __name__ == '__main__':
     except (KeyboardInterrupt, SystemExit):
         print("\nScheduler stopped. Starting manual tweet functionality.\n\n")
         manual_tweet()
-
-
