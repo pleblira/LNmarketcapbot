@@ -9,6 +9,7 @@ import subprocess
 import os
 from datetime import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
+from create_gif import *
 
 def manual_tweet():
     while True:
@@ -115,11 +116,15 @@ def LN_cap():
 
     # picking random image
     random_image_picker = random.randint(1,6)
+    # random_image_picker = 1
     tweet_image = f"assets/blank_belly_dark_mode/{str(random_image_picker)}.jpg"
 
     # typing LN capacity on mascot
     tweet_image = text_on_images.image_draw_angled(LN_capacity_in_BTC, tweet_image)
-    subprocess.call(('open', "assets/tweet_image.jpg"))
+    # subprocess.call(('open', "assets/tweet_image.jpg"))
+
+    # making tweet image a gif with sparkle
+    sparkle_gif_create_frames("assets/tweet_image.jpg", random_image_picker)
 
     custom_text_yes_or_no = input("Would you like to add custom text to the tweet (y/n)? ")
     if custom_text_yes_or_no == "y":
@@ -137,9 +142,9 @@ def LN_cap():
     print(tweet_message)
     confirm_send_tweet = input("Send tweet (y/n)? ")
     if confirm_send_tweet == "y":
-        tweepy_send_tweet(tweet_message,"assets/tweet_image.jpg")
+        tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
         print("Tweet sent")
-        os.remove("assets/tweet_image.jpg")
+        # os.remove("assets/tweet_image.jpg")
         quit()
     else:
         return
@@ -161,7 +166,6 @@ def LN_cap_automated():
     # Calculating current amount allocated in the LN
     LN_mcap_text = f"$ allocated in the LN: ${LN_capacity_in_BTC*btc_usd:,.0f}"
 
-
     # picking random image
     random_image_picker = random.randint(1,6)
     with open("previously_selected_images.txt","r") as file:
@@ -177,10 +181,13 @@ def LN_cap_automated():
     with open("previously_selected_images.txt","a") as file:
         file.write(str(random_image_picker) + "\n")
 
-    tweet_image = "assets/blank_belly_dark_mode/" + str(random_image_picker) + ".jpg"
+    tweet_image = f"assets/blank_belly_dark_mode/{str(random_image_picker)}.jpg"
 
     # typing LN capacity on mascot
     tweet_image = text_on_images.image_draw_angled(LN_capacity_in_BTC, tweet_image)
+
+    # making tweet image a gif with sparkle
+    sparkle_gif_create_frames("assets/tweet_image.jpg", random_image_picker)
 
     # LIGHTNING NETWORK CAPACITY TWEET
     tweet_message = (
@@ -190,9 +197,8 @@ def LN_cap_automated():
     LN_mcap_text
         )
     print(tweet_message)
-    tweepy_send_tweet(tweet_message,"assets/tweet_image.jpg")
+    # tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
     print("Tweet sent")
-    os.remove("assets/tweet_image.jpg")
 
 if __name__ == '__main__':
     scheduler = BlockingScheduler()
