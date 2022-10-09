@@ -197,7 +197,7 @@ def LN_cap_automated():
     LN_mcap_text
         )
     print(tweet_message)
-    # tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
+    tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
     print("Tweet sent")
 
 if __name__ == '__main__':
