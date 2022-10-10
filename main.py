@@ -10,6 +10,7 @@ import os
 from datetime import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
 from create_gif import *
+from s3_update_LN_capacity_and_compare import *
 
 def manual_tweet():
     while True:
@@ -126,6 +127,9 @@ def LN_cap():
     # making tweet image a gif with sparkle
     sparkle_gif_create_frames("assets/tweet_image.jpg", random_image_picker)
 
+    # Getting the weekly increase based on the bot's history
+    LN_capacity_weekly_increase_text = s3_update_LN_capacity_and_compare(LN_capacity_in_BTC)
+
     custom_text_yes_or_no = input("Would you like to add custom text to the tweet (y/n)? ")
     if custom_text_yes_or_no == "y":
         custom_text = input("Type text (single line): ")
@@ -135,7 +139,8 @@ def LN_cap():
     "LIGHTNING NETWORK CAPACITY UPDATE" + "\n\n" + 
     LN_capacity_text + "\n" + 
     btc_usd_text + "\n" +
-    LN_mcap_text
+    LN_mcap_text + "\n" + 
+    LN_capacity_weekly_increase_text
         )
     if custom_text_yes_or_no == "y":
         tweet_message = tweet_message + "\n\n" + custom_text
@@ -189,12 +194,16 @@ def LN_cap_automated():
     # making tweet image a gif with sparkle
     sparkle_gif_create_frames("assets/tweet_image.jpg", random_image_picker)
 
+    # Getting the weekly increase based on the bot's history
+    LN_capacity_weekly_increase_text = s3_update_LN_capacity_and_compare(LN_capacity_in_BTC)
+
     # LIGHTNING NETWORK CAPACITY TWEET
     tweet_message = (
     "LIGHTNING NETWORK CAPACITY UPDATE" + "\n\n" + 
     LN_capacity_text + "\n" + 
     btc_usd_text + "\n" +
-    LN_mcap_text
+    LN_mcap_text + "\n" + 
+    LN_capacity_weekly_increase_text
         )
     print(tweet_message)
     tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
