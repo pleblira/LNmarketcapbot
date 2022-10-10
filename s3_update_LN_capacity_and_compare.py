@@ -36,7 +36,7 @@ def s3_update_LN_capacity_and_compare(LN_capacity_in_BTC):
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY
     )
     content=json.dumps(LN_capacity_by_day).encode('utf-8')
-    # s3_upload.Object('pleblira', 'LN_capacity_by_day.json').put(Body=content,ACL="public-read")
+    s3_upload.Object('pleblira', 'LN_capacity_by_day.json').put(Body=content,ACL="public-read")
 
     # getting LN capacity from a week ago
     for value in LN_capacity_by_day:
