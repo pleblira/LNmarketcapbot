@@ -69,7 +69,7 @@ def LN_flippening_tracker():
             tweet_image = image_url_or_path
     elif random_image_or_pick == "random":
         random_image_picker = random.randint(1,5)
-        tweet_image = "assets/full_belly/" + str(random_image_picker) + ".png"
+        tweet_image = "assets/full_belly_dark_mode/" + str(random_image_picker) + ".png"
     else:
         print("Wrong option detected")
         quit()
@@ -100,7 +100,6 @@ def LN_flippening_tracker():
         quit()
     else:
         return
-    # tweepy_send_tweet has been disabled for testing
 
 
 def LN_cap():
