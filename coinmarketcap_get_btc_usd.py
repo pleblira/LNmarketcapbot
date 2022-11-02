@@ -24,3 +24,4 @@ def coinmarketcap_get_btc_usd():
     response = session.get(url, params=parameters)
     btc_usd = json.loads(response.text)['data']['BTC']['quote']['USD']['price']
     return btc_usd
+

@@ -38,15 +38,15 @@ def s3_update_LN_capacity_and_compare(LN_capacity_in_BTC):
     content=json.dumps(LN_capacity_by_day).encode('utf-8')
     s3_upload.Object('pleblira', 'LN_capacity_by_day.json').put(Body=content,ACL="public-read")
 
-    # getting LN capacity from a week ago
-    for value in LN_capacity_by_day:
-        if value['date'] == f"{date.today() + timedelta(days=-7):%Y%m%d}":
-            LN_capacity_in_BTC_a_week_ago = value['capacity']
+    # getting LN capacity from a week ago - everything below this except init commented out for a week
+    # for value in LN_capacity_by_day:
+    #     if value['date'] == f"{date.today() + timedelta(days=-7):%Y%m%d}":
+    #         LN_capacity_in_BTC_a_week_ago = value['capacity']
 
-    LN_capacity_percentage_change = f"{(100 * (LN_capacity_in_BTC - int(LN_capacity_in_BTC_a_week_ago))/int(LN_capacity_in_BTC_a_week_ago)):+.2f}"
-    LN_capacity_weekly_change_text = (f"LN capacity change from last week: {LN_capacity_percentage_change.rstrip('0').rstrip('.')}%")
-    print(LN_capacity_weekly_change_text)
-    return LN_capacity_weekly_change_text
+    # LN_capacity_percentage_change = f"{(100 * (LN_capacity_in_BTC - int(LN_capacity_in_BTC_a_week_ago))/int(LN_capacity_in_BTC_a_week_ago)):+.2f}"
+    # LN_capacity_weekly_change_text = (f"LN capacity change from last week: {LN_capacity_percentage_change.rstrip('0').rstrip('.')}%")
+    # print(LN_capacity_weekly_change_text)
+    # return LN_capacity_weekly_change_text
 
 
 # if __name__ == '__main__':
