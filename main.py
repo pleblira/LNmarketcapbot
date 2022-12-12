@@ -127,7 +127,7 @@ def LN_cap():
     sparkle_gif_create_frames("assets/tweet_image.jpg", random_image_picker)
 
     # Getting the weekly increase based on the bot's history
-    LN_capacity_weekly_change_text = s3_update_LN_capacity_and_compare(LN_capacity_in_BTC)
+    LN_capacity_period_change_text = s3_update_LN_capacity_and_compare(LN_capacity_in_BTC)
 
     custom_text_yes_or_no = input("Would you like to add custom text to the tweet (y/n)? ")
     if custom_text_yes_or_no == "y":
@@ -139,8 +139,8 @@ def LN_cap():
     LN_capacity_text + "\n" + 
     btc_usd_text + "\n" +
     LN_mcap_text
-    #  + "\n" + "\n" +
-    # LN_capacity_weekly_change_text # move back inside of tweet_message in a week
+     + "\n" + "\n" +
+    LN_capacity_period_change_text # move back inside of tweet_message in a week
         )
     if custom_text_yes_or_no == "y":
         tweet_message = tweet_message + "\n\n" + custom_text
@@ -173,6 +173,9 @@ def LN_cap_automated():
 
     # picking random image
     random_image_picker = random.randint(1,6)
+    # when it picks image 4, switch to image 2 (removing image 4 from circulation for now)
+    if random_image_picker == 4:
+        random_image_picker = 2
     with open("previously_selected_images.txt","r") as file:
         lines = file.readlines()
         if len(lines) == 0:
@@ -195,7 +198,7 @@ def LN_cap_automated():
     sparkle_gif_create_frames("assets/tweet_image.jpg", random_image_picker)
 
     # Getting the weekly increase based on the bot's history
-    LN_capacity_weekly_change_text = s3_update_LN_capacity_and_compare(LN_capacity_in_BTC)
+    LN_capacity_period_change_text = s3_update_LN_capacity_and_compare(LN_capacity_in_BTC)
 
     # LIGHTNING NETWORK CAPACITY TWEET
     tweet_message = (
@@ -203,8 +206,8 @@ def LN_cap_automated():
     LN_capacity_text + "\n" + 
     btc_usd_text + "\n" +
     LN_mcap_text
-    #  + "\n" + "\n"
-    # + LN_capacity_weekly_change_text # move back into tweet message
+     + "\n" + "\n"
+    + LN_capacity_period_change_text
         )
     print(tweet_message)
     tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
