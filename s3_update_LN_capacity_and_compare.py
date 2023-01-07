@@ -21,7 +21,6 @@ def s3_update_LN_capacity_and_compare(LN_capacity_in_BTC):
     # downloading LN capacity history file from S3 bucket
     boto3.client('s3').download_file('pleblira', 'LN_capacity_by_day.json', 'assets/LN_capacity_by_day.json')
 
-
     # appending today's capacity to json file
     with open('assets/LN_capacity_by_day.json', 'r+') as openfile:
         LN_capacity_by_day = json.load(openfile)
@@ -57,11 +56,16 @@ def s3_update_LN_capacity_and_compare(LN_capacity_in_BTC):
             if value['date'] == f"{date.today() + timedelta(days=-30):%Y%m%d}":
                 LN_capacity_in_BTC_from_previous_period = value['capacity']
         
+    # checking if ATH for capacity
+    LN_capacity_ATH = True
+    for item in LN_capacity_by_day:
+        if item['capacity'] > LN_capacity_in_BTC:
+            LN_capacity_ATH = False
 
     LN_capacity_percentage_change = f"{(100 * (LN_capacity_in_BTC - int(LN_capacity_in_BTC_from_previous_period))/int(LN_capacity_in_BTC_from_previous_period)):+.2f}"
     LN_capacity_period_change_text = (f"LN capacity change from {week_or_month}: {LN_capacity_percentage_change.rstrip('0').rstrip('.')}%")
     print(LN_capacity_period_change_text)
-    return LN_capacity_period_change_text
+    return LN_capacity_period_change_text, LN_capacity_ATH
 
 
 if __name__ == '__main__':

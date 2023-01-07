@@ -197,8 +197,16 @@ def LN_cap_automated():
     # making tweet image a gif with sparkle
     sparkle_gif_create_frames("assets/tweet_image.jpg", random_image_picker)
 
+    # running S3_update_LN_capacity_and_compare function
+    info_from_s3 = s3_update_LN_capacity_and_compare(LN_capacity_in_BTC)
+
     # Getting the weekly increase based on the bot's history
-    LN_capacity_period_change_text = s3_update_LN_capacity_and_compare(LN_capacity_in_BTC)
+    LN_capacity_period_change_text = info_from_s3[0]
+
+    # LN Capacity ATH announcement
+    LN_capacity_ATH_text = ""
+    if info_from_s3[1] == True:
+        LN_capacity_ATH_text = "\n\nLN Capacity ATH!!"
 
     # LIGHTNING NETWORK CAPACITY TWEET
     tweet_message = (
@@ -208,6 +216,7 @@ def LN_cap_automated():
     LN_mcap_text
      + "\n" + "\n"
     + LN_capacity_period_change_text
+     + LN_capacity_ATH_text
         )
     print(tweet_message)
     tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
