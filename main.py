@@ -105,7 +105,7 @@ def LN_flippening_tracker():
 def LN_cap():
     # fetching LN capacity in BTC
     LN_capacity_in_BTC = amboss_get_LN_capacity()
-    LN_capacity_text = f"Current LN channel capacity: {LN_capacity_in_BTC:.0f} BTC"
+    LN_capacity_text = f"Current LN capacity: {LN_capacity_in_BTC:.0f} BTC"
 
     # fetching BTC price in USD
     btc_usd = coinmarketcap_get_btc_usd()
