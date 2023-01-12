@@ -162,7 +162,7 @@ def LN_cap():
 def LN_cap_automated():
     # fetching LN capacity in BTC
     LN_capacity_in_BTC = amboss_get_LN_capacity()
-    LN_capacity_text = f"Current LN channel capacity: {LN_capacity_in_BTC} BTC"
+    LN_capacity_text = f"Current LN capacity: {LN_capacity_in_BTC} BTC"
 
     # fetching BTC price in USD
     btc_usd = coinmarketcap_get_btc_usd()
