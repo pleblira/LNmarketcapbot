@@ -21,6 +21,7 @@ def timer(func):
     
     return wrapper
 
+
 def manual_tweet():
     while True:
         option = input("What kind of tweet would you like to send (LN_flippening/LN_cap/quit/autotest)? ")
