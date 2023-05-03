@@ -8,7 +8,7 @@
       "startCommand": "echo starting!",
       "healthcheckPath": "/",
       "healthcheckTimeout": 100,
-      "restartPolicyType": "on_failure"
+      "restartPolicyType": "on_failure",
       "restartPolicyMaxRetries" = 5
     }
   }
