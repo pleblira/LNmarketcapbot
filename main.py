@@ -11,6 +11,15 @@ from datetime import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
 from create_gif import *
 from s3_update_LN_capacity_and_compare import *
+import time
+
+def timer(func):
+    def wrapper(*args, **kwargs):
+        before = time.time()
+        func(*args, **kwargs)
+        print("Function took:", time.time() - before, "seconds")
+    
+    return wrapper
 
 def manual_tweet():
     while True:
@@ -20,9 +29,9 @@ def manual_tweet():
         if option.lower() == "ln_flippening":
             LN_flippening_tracker()
         if option.lower() == "ln_cap":
-            LN_cap()
+            LN_cap(automated=False)
         if option.lower() == "autotest":
-            LN_cap_automated()
+            LN_cap(automated=True)
         else:
             continue
 
@@ -101,65 +110,13 @@ def LN_flippening_tracker():
     else:
         return
 
-
-def LN_cap():
-    # fetching LN capacity in BTC
-    LN_capacity_in_BTC = amboss_get_LN_capacity()
-    LN_capacity_text = f"Current LN capacity: {LN_capacity_in_BTC:.0f} BTC"
-
-    # fetching BTC price in USD
-    btc_usd = coinmarketcap_get_btc_usd()
-    btc_usd_text =f"BTC price: ${btc_usd:,.0f}"
-
-    # Calculating current amount allocated in the LN
-    LN_mcap_text = f"$ allocated in the LN: ${LN_capacity_in_BTC*btc_usd:,.0f}"
-
-    # picking random image
-    random_image_picker = random.randint(1,6)
-    # random_image_picker = 1
-    tweet_image = f"assets/blank_belly_dark_mode/{str(random_image_picker)}.jpg"
-
-    # typing LN capacity on mascot
-    tweet_image = text_on_images.image_draw_angled(LN_capacity_in_BTC, tweet_image)
-    # subprocess.call(('open', "assets/tweet_image.jpg"))
-
-    # making tweet image a gif with sparkle
-    sparkle_gif_create_frames("assets/tweet_image.jpg", random_image_picker)
-
-    # Getting the weekly increase based on the bot's history
-    LN_capacity_period_change_text = s3_update_LN_capacity_and_compare(LN_capacity_in_BTC)
-
-    custom_text_yes_or_no = input("Would you like to add custom text to the tweet (y/n)? ")
-    if custom_text_yes_or_no == "y":
-        custom_text = input("Type text (single line): ")
-
-    # LIGHTNING NETWORK CAPACITY TWEET
-    tweet_message = (
-    "LIGHTNING NETWORK CAPACITY UPDATE" + "\n\n" + 
-    LN_capacity_text + "\n" + 
-    btc_usd_text + "\n" +
-    LN_mcap_text
-     + "\n" + "\n" +
-    LN_capacity_period_change_text # move back inside of tweet_message in a week
-        )
-    if custom_text_yes_or_no == "y":
-        tweet_message = tweet_message + "\n\n" + custom_text
-    print(tweet_message)
-    confirm_send_tweet = input("Send tweet (y/n)? ")
-    if confirm_send_tweet == "y":
-        tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
-        print("Tweet sent")
-        # os.remove("assets/tweet_image.jpg")
-        quit()
-    else:
-        return
-
 # if __name__ == "__main__":
 #     main()
 
 # script initialization: It auto-starts the daily LN_cap tweet at 12 pm ET. User can press Ctrl+C or Ctrl+Break to start manual tweeting functionality
 
-def LN_cap_automated():
+@timer
+def LN_cap(automated):
     # fetching LN capacity in BTC
     LN_capacity_in_BTC = amboss_get_LN_capacity()
     LN_capacity_text = f"Current LN capacity: {LN_capacity_in_BTC} BTC"
@@ -189,16 +146,15 @@ def LN_cap_automated():
     with open("previously_selected_images.txt","a") as file:
         file.write(str(random_image_picker) + "\n")
 
-    tweet_image = f"assets/blank_belly_dark_mode/{str(random_image_picker)}.jpg"
-
     # typing LN capacity on mascot
+    tweet_image = f"assets/blank_belly_dark_mode/{str(random_image_picker)}.jpg"
     tweet_image = text_on_images.image_draw_angled(LN_capacity_in_BTC, tweet_image)
 
     # making tweet image a gif with sparkle
     sparkle_gif_create_frames("assets/tweet_image.jpg", random_image_picker)
 
     # running S3_update_LN_capacity_and_compare function
-    info_from_s3 = s3_update_LN_capacity_and_compare(LN_capacity_in_BTC)
+    info_from_s3 = s3_update_LN_capacity_and_compare(LN_capacity_in_BTC, automated)
 
     # Getting the weekly increase based on the bot's history
     LN_capacity_period_change_text = info_from_s3[0]
@@ -219,12 +175,22 @@ def LN_cap_automated():
      + LN_capacity_ATH_text
         )
     print(tweet_message)
-    tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
-    print("Tweet sent")
+    if automated == True: 
+        tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
+        print("Tweet sent")
+    else:
+        confirm_send_tweet = input("Send tweet (y/n)? ")
+        if confirm_send_tweet == "y":
+            # tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
+            print("Tweet sent")
+            # os.remove("assets/tweet_image.jpg")
+            quit()
+        else:
+            return
 
 if __name__ == '__main__':
     scheduler = BlockingScheduler()
-    scheduler.add_job(LN_cap_automated, 'cron', hour=12, minute=00, timezone="America/New_York")
+    scheduler.add_job(lambda: LN_cap(automated=True), 'cron', hour=12, minute=00, timezone="America/New_York")
     print('Press Ctrl+{0} to stop scheduler and switch to manual tweet.'.format('Break' if os.name == 'nt' else 'C'))
 
     try:

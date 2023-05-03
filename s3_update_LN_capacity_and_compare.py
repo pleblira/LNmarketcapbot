@@ -12,7 +12,7 @@ if ENV_FILE:
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
 
-def s3_update_LN_capacity_and_compare(LN_capacity_in_BTC):
+def s3_update_LN_capacity_and_compare(LN_capacity_in_BTC, automated):
     # creating dictionary to dump jsons in
     LN_capacity_by_day = []
 
@@ -29,14 +29,15 @@ def s3_update_LN_capacity_and_compare(LN_capacity_in_BTC):
         openfile.write(json.dumps(LN_capacity_by_day, indent=4))
 
     # overwriting history file back to S3
-    s3_upload = boto3.resource(
-        's3',
-        region_name='us-east-1',
-        aws_access_key_id=AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=AWS_SECRET_ACCESS_KEY
-    )
-    content=json.dumps(LN_capacity_by_day).encode('utf-8')
-    s3_upload.Object('pleblira', 'LN_capacity_by_day.json').put(Body=content,ACL="public-read")
+    if automated == True:
+        s3_upload = boto3.resource(
+            's3',
+            region_name='us-east-1',
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY
+        )
+        content=json.dumps(LN_capacity_by_day).encode('utf-8')
+        s3_upload.Object('pleblira', 'LN_capacity_by_day.json').put(Body=content,ACL="public-read")
 
     # getting LN capacity from a week ago or a month ago
     random_weekly_or_monthly = random.randint(1,3)
