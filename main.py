@@ -199,3 +199,4 @@ if __name__ == '__main__':
     except (KeyboardInterrupt, SystemExit):
         print("\nScheduler stopped. Starting manual tweet functionality.\n\n")
         manual_tweet()
+        
