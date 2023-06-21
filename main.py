@@ -1,7 +1,7 @@
 from amboss_get_LN_capacity import *
 from coinmarketcap_get_btc_usd import *
 from coinmarketcap_get_shitcoin_mcap import *
-from tweepy_send_tweet import *
+from tweet_with_apiv2 import *
 import random
 import urllib.request
 import text_on_images
@@ -9,7 +9,7 @@ import subprocess
 import os
 from datetime import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
-from create_gif import *
+from sparkle_gif_create_frames import *
 from s3_update_LN_capacity_and_compare import *
 import time
 
@@ -21,10 +21,9 @@ def timer(func):
     
     return wrapper
 
-
 def manual_tweet():
     while True:
-        option = input("What kind of tweet would you like to send (LN_flippening/LN_cap/quit/autotest)? ")
+        option = input("What kind of tweet would you like to send (LN_flippening/LN_cap/autotest/quit)? ")
         if option.lower() == "quit":
             quit()
         if option.lower() == "ln_flippening":
@@ -83,7 +82,6 @@ def LN_flippening_tracker():
     else:
         print("Wrong option detected")
         quit()
-    subprocess.call(('open', tweet_image))
 
     custom_text_yes_or_no = input("Would you like to add custom text to the tweet (y/n)? ")
     if custom_text_yes_or_no == "y":
@@ -103,16 +101,14 @@ def LN_flippening_tracker():
     print(tweet_message)
     confirm_send_tweet = input("Send tweet (y/n)? ")
     if confirm_send_tweet == "y":
-        tweepy_send_tweet(tweet_message,tweet_image)
+        # tweepy_send_tweet(tweet_message,tweet_image)
+        tweet_with_apiv2(tweet_message,tweet_image)
         print("Tweet sent")
         if random_image_or_pick == "pick" and image_url_or_path.find("http")>-1 and image_url_or_path.find("//")>0:
             os.remove("assets/00000001.jpg")
         quit()
     else:
         return
-
-# if __name__ == "__main__":
-#     main()
 
 # script initialization: It auto-starts the daily LN_cap tweet at 12 pm ET. User can press Ctrl+C or Ctrl+Break to start manual tweeting functionality
 
@@ -177,7 +173,8 @@ def LN_cap(automated):
         )
     print(tweet_message)
     if automated == True: 
-        tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
+        tweet_with_apiv2(tweet_message,"assets/tweet_image_sparkled.gif")
+        # tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
         print("Tweet sent")
     else:
         confirm_send_tweet = input("Send tweet (y/n)? ")
