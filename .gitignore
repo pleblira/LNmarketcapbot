@@ -7,6 +7,21 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+*/.DS_Store
+*/*/.DS_Store
+*/*/*/.DS_Store
+*/*/*/*/.DS_Store
+*/*/*/*/*/.DS_Store
+*/*/*/*/*/*/.DS_Store
+*.DS_Store
+.env
+
+
 # Temporary files
 tempCodeRunnerFile.py
 tempCoreRunnerFile.python
