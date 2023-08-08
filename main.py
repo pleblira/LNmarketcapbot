@@ -175,16 +175,15 @@ def LN_cap(automated):
         )
     print(tweet_message)
     if automated == True: 
-        # tweet_with_apiv2(tweet_message,"assets/tweet_image_sparkled.gif")
-        post_note(tweet_message + " " + upload_to_voidcat_and_return_url("assets/tweet_image_sparkled.gif", "gif"))
-        # tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
+        url_of_note_on_snort_social = post_note(tweet_message + " " + upload_to_voidcat_and_return_url("assets/tweet_image_sparkled.gif", "gif"))
+        tweet_with_apiv2(tweet_message+"\n\nNOSTR: "+url_of_note_on_snort_social,"assets/tweet_image_sparkled.gif")
         print("Tweet sent")
     else:
         confirm_send_tweet = input("Send tweet (y/n)? ")
         if confirm_send_tweet == "y":
-            # tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
+            url_of_note_on_snort_social = post_note(tweet_message + " " + upload_to_voidcat_and_return_url("assets/tweet_image_sparkled.gif", "gif"))
+            tweet_with_apiv2(tweet_message+"\n\nNOSTR: "+url_of_note_on_snort_social,"assets/tweet_image_sparkled.gif")
             print("Tweet sent")
-            # os.remove("assets/tweet_image.jpg")
             quit()
         else:
             return

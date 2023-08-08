@@ -21,6 +21,8 @@ __pycache__/
 *.DS_Store
 .env
 
+# moving files here to delete after, making sure nothing breaks
+todelete/
 
 # Temporary files
 tempCodeRunnerFile.py

@@ -38,5 +38,7 @@ def post_note(content):
 
     relay_manager.close_connections()
 
+    return f"https://snort.social/e/{PublicKey.hex_to_bech32(event.id, 'Encoding.BECH32')}"
+
 if __name__ == "__main__":
     post_note(PrivateKey.from_nsec("nsec1kenpmwxye80zh93ugfq0jyq73hepnk3fhj5rytv8drs4sdsycumq5pg8uz"), "test 123", tags=[["e", "262556c024988d7e76d143533d10c09834d20b69a0595800a713c2684c3be988"]])
