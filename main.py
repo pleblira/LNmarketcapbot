@@ -12,6 +12,8 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from sparkle_gif_create_frames import *
 from s3_update_LN_capacity_and_compare import *
 import time
+from post_note import *
+from upload_to_voidcat_and_return_url import *
 
 def timer(func):
     def wrapper(*args, **kwargs):
@@ -173,7 +175,8 @@ def LN_cap(automated):
         )
     print(tweet_message)
     if automated == True: 
-        tweet_with_apiv2(tweet_message,"assets/tweet_image_sparkled.gif")
+        # tweet_with_apiv2(tweet_message,"assets/tweet_image_sparkled.gif")
+        post_note(tweet_message + " " + upload_to_voidcat_and_return_url("assets/tweet_image_sparkled.gif", "gif"))
         # tweepy_send_tweet(tweet_message,"assets/tweet_image_sparkled.gif")
         print("Tweet sent")
     else:
